@@ -28,6 +28,5 @@ FROM employees A INNER JOIN customers B ON A.employeeNumber = B.salesRepEmployee
 RIGHT JOIN orders C ON B.customerNumber = C.customerNumber
 LEFT JOIN orderdetails D ON C.orderNumber = D.orderNumber
 GROUP BY A.employeeNumber
-ORDER BY Orders_Made
+ORDER BY Orders_Made DESC
 
--- Testing kasdjf asdf aw4
