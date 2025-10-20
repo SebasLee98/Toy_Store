@@ -5,8 +5,8 @@ JOIN orders B ON A.customerNumber = B.customerNumber
 JOIN orderdetails C ON B.orderNumber = C.orderNumber
 JOIN products D ON C.productCode = D.productCode  
 )
-SELECT distinct customerName, count(DISTINCT orderNumber) AS Number_of_orders_made
-FROM First_Query GROUP BY customerName ORDER BY Number_of_orders_made DESC;
+SELECT distinct customerName, productLine, orderNumber
+FROM First_Query WHERE productLine <> "Vintage Cars"
 
 -- Most popular products ranked
 SELECT B.productName, A.quantityOrdered FROM orderdetails A
