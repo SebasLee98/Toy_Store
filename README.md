@@ -5,4 +5,5 @@ Analysis of Toy sales, types, customers, orders, and sales made. Data is seperat
 ![alt text](Popular_Product_Country.jpg)
 
 # Most successful employee
+![alt text](Successful_employees.jpg)
 ![alt text](Profit_Generate_per_Employee.jpg)
