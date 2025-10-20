@@ -28,9 +28,7 @@ FROM employees A INNER JOIN customers B ON A.employeeNumber = B.salesRepEmployee
 RIGHT JOIN orders C ON B.customerNumber = C.customerNumber
 LEFT JOIN orderdetails D ON C.orderNumber = D.orderNumber
 GROUP BY A.employeeNumber
-ORDER BY Orders_Made DESC;
-
-SELECT * FROM customers;
+ORDER BY Orders_Made DESC
 
 SELECT 
 CASE WHEN creditLimit < 75000 then 'a: Less than $75K'
