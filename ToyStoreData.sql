@@ -30,6 +30,8 @@ LEFT JOIN orderdetails D ON C.orderNumber = D.orderNumber
 GROUP BY A.employeeNumber
 ORDER BY Orders_Made DESC
 
+
+-- Categories
 SELECT 
 CASE WHEN creditLimit < 75000 then 'a: Less than $75K'
 WHEN creditLimit BETWEEN 75000 AND 100000 THEN 'b: $750 - $100K'
@@ -39,3 +41,5 @@ ELSE 'Other' END AS credit_limit,
 count(distinct c.customerNumber) AS customers
 FROM customers AS c
 GROUP BY credit_limit;
+
+SELECT productCode, count(distinct productCode) FROM orderdetails GROUP BY productCode
