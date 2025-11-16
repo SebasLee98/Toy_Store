@@ -42,4 +42,12 @@ count(distinct c.customerNumber) AS customers
 FROM customers AS c
 GROUP BY credit_limit;
 
-SELECT productCode, count(distinct productCode) FROM orderdetails GROUP BY productCode
+SELECT productCode, count(productCode) FROM orderdetails GROUP BY productCode
+
+SELECT A.country, sum(C.quantityOrdered * C.priceEach) AS Revenue
+FROM customers A 
+RIGHT JOIN orders B ON A.customerNumber = B.customerNumber 
+INNER JOIN orderdetails C ON B.orderNumber = C.orderNumber
+GROUP BY A.country
+
+SELECT * FROM orderdetails
