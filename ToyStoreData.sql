@@ -31,7 +31,7 @@ GROUP BY A.employeeNumber
 ORDER BY Orders_Made DESC
 
 
--- Categories
+-- Categorizing data
 SELECT 
 CASE WHEN creditLimit < 75000 then 'a: Less than $75K'
 WHEN creditLimit BETWEEN 75000 AND 100000 THEN 'b: $750 - $100K'
@@ -42,12 +42,13 @@ count(distinct c.customerNumber) AS customers
 FROM customers AS c
 GROUP BY credit_limit;
 
-SELECT productCode, count(productCode) FROM orderdetails GROUP BY productCode
-
-SELECT A.country, sum(C.quantityOrdered * C.priceEach) AS Revenue
+-- Calculate Profit made per country and the percent of the total profit
+WITH Revenue_setup AS (
+SELECT A.country AS Nation, sum(C.quantityOrdered * C.priceEach) AS Revenue
 FROM customers A 
 RIGHT JOIN orders B ON A.customerNumber = B.customerNumber 
 INNER JOIN orderdetails C ON B.orderNumber = C.orderNumber
-GROUP BY A.country
+GROUP BY Nation
+)
+SELECT Nation, CONCAT('$', Revenue) AS Profit_Made, Revenue/sum(Revenue) OVER() * 100 AS Percent_of_Total_Profit FROM Revenue_setup GROUP BY Nation
 
-SELECT * FROM orderdetails
