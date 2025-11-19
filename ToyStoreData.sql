@@ -48,7 +48,6 @@ SELECT A.country AS Nation, sum(C.quantityOrdered * C.priceEach) AS Revenue
 FROM customers A 
 RIGHT JOIN orders B ON A.customerNumber = B.customerNumber 
 INNER JOIN orderdetails C ON B.orderNumber = C.orderNumber
-GROUP BY Nation
+GROUP BY Nation ORDER BY Revenue DESC
 )
-SELECT Nation, CONCAT('$', Revenue) AS Profit_Made, Revenue/sum(Revenue) OVER() * 100 AS Percent_of_Total_Profit FROM Revenue_setup GROUP BY Nation
-
+SELECT Nation, CONCAT('$', Revenue) AS Profit_Made, CONCAT(round(Revenue/sum(Revenue) OVER() * 100, 2), '%') AS Percent_of_Total_Profit FROM Revenue_setup GROUP BY Nation
