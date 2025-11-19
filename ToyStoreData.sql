@@ -44,11 +44,13 @@ GROUP BY credit_limit;
 
 -- Calculate Profit made per country and the percent of the total profit
 WITH Revenue_setup AS (
-SELECT A.country AS Nation, sum(C.quantityOrdered * C.priceEach) AS Revenue
-FROM customers A 
-RIGHT JOIN orders B ON A.customerNumber = B.customerNumber 
-INNER JOIN orderdetails C ON B.orderNumber = C.orderNumber
-GROUP BY Nation ORDER BY Revenue DESC
+    SELECT 
+    A.country AS Nation, 
+    sum(C.quantityOrdered * C.priceEach) AS Revenue
+    FROM customers A 
+    RIGHT JOIN orders B ON A.customerNumber = B.customerNumber 
+    INNER JOIN orderdetails C ON B.orderNumber = C.orderNumber
+    GROUP BY Nation ORDER BY Revenue DESC
 )
 SELECT 
 Nation, 
