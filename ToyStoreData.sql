@@ -1,9 +1,9 @@
 -- Identify customers on file that did not order a vintage car
 With First_Query AS (
-SELECT A.customerName, C.orderNumber, D.productLine, C.productCode, C.quantityOrdered FROM customers A
-JOIN orders B ON A.customerNumber = B.customerNumber
-JOIN orderdetails C ON B.orderNumber = C.orderNumber
-JOIN products D ON C.productCode = D.productCode  
+    SELECT A.customerName, C.orderNumber, D.productLine, C.productCode, C.quantityOrdered FROM customers A
+    JOIN orders B ON A.customerNumber = B.customerNumber
+    JOIN orderdetails C ON B.orderNumber = C.orderNumber
+    JOIN products D ON C.productCode = D.productCode  
 )
 SELECT distinct customerName, productLine, orderNumber
 FROM First_Query WHERE productLine <> "Vintage Cars"
@@ -15,10 +15,10 @@ ORDER BY quantityOrdered DESC LIMIT 15;
 
 -- The most popular product in each country
 WITH Set_Up AS (
-SELECT ROW_NUMBER() OVER (PARTITION BY D.country ORDER BY B.quantityOrdered DESC) AS First_Step, D.country, A.productName, B.quantityOrdered FROM products A 
-RIGHT JOIN orderdetails B ON A.productCode = B.productCode
-RIGHT JOIN orders C ON B.orderNumber = C.orderNumber
-LEFT JOIN customers D ON C.customerNumber = D.customerNumber
+    SELECT ROW_NUMBER() OVER (PARTITION BY D.country ORDER BY B.quantityOrdered DESC) AS First_Step, D.country, A.productName, B.quantityOrdered FROM products A 
+    RIGHT JOIN orderdetails B ON A.productCode = B.productCode
+    RIGHT JOIN orders C ON B.orderNumber = C.orderNumber
+    LEFT JOIN customers D ON C.customerNumber = D.customerNumber
 )
 SELECT * FROM Set_Up WHERE First_Step = 1;
 
