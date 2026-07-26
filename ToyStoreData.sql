@@ -59,13 +59,12 @@ CONCAT(round(Revenue/sum(Revenue) OVER() * 100, 2), '%') AS Percent_of_Total_Pro
 FROM Revenue_setup GROUP BY Nation
 
 
-
-SELECT B.customerNumber, count(distinct A.orderNumber) AS Number_of_Orders_Made 
-FROM orders A 
-LEFT JOIN customers B ON A.customerNumber = B.customerNumber 
-GROUP BY B.customerNumber ORDER BY Number_of_Orders_Made DESC
+-- Setting up for report
 
 WITH Ind_Sums AS (
-    SELECT orderNumber, productCode, sum(quantityOrdered * priceEach) AS PC_Calculations FROM orderdetails GROUP BY orderNumber, productCode
+    SELECT orderNumber, sum(quantityOrdered * priceEach) AS PC_Calculations FROM orderdetails GROUP BY orderNumber, productCode
 )
 SELECT orderNumber, sum(PC_Calculations) FROM Ind_Sums GROUP BY orderNumber
+
+SELECT A.orderNumber, A.customerNumber, B.quantityOrdered, B.priceEach FROM orders A 
+LEFT JOIN orderdetails B ON A.orderNumber =  B.orderNumber
