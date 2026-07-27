@@ -60,11 +60,13 @@ FROM Revenue_setup GROUP BY Nation
 
 
 -- Setting up for report
+-- Calculate total payment each customer owes and how much they actually paid
 
-WITH Ind_Sums AS (
-    SELECT orderNumber, sum(quantityOrdered * priceEach) AS PC_Calculations FROM orderdetails GROUP BY orderNumber, productCode
+WITH cust_specs AS (
+    WITH general_info AS (
+        SELECT A.orderNumber, A.customerNumber, B.quantityOrdered,B.productCode, B.priceEach FROM orders A 
+        LEFT JOIN orderdetails B ON A.orderNumber =  B.orderNumber
+    )
+    SELECT customerNumber, sum(quantityOrdered * priceEach) AS Expected_Payment FROM general_info GROUP BY customerNumber
 )
-SELECT orderNumber, sum(PC_Calculations) FROM Ind_Sums GROUP BY orderNumber
-
-SELECT A.orderNumber, A.customerNumber, B.quantityOrdered, B.priceEach FROM orders A 
-LEFT JOIN orderdetails B ON A.orderNumber =  B.orderNumber
+SELECT C.customerNumber, C.Expected_Payment, sum(D.amount) AS Actual_Payment, C.Expected_Payment - sum(D.amount) AS Remaining_Balance FROM cust_specs C LEFT JOIN payments D ON C.customerNumber = D.customerNumber GROUP BY customerNumber
