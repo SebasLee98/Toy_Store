@@ -65,13 +65,17 @@ FROM Revenue_setup GROUP BY Nation
 WITH cust_specs AS (
     -- Show details how many of each product each customer ordered
     WITH general_info AS (
-        SELECT A.orderNumber, A.customerNumber, B.quantityOrdered,B.productCode, B.priceEach FROM orders A 
+        SELECT A.orderNumber, A.customerNumber, B.quantityOrdered,B.productCode, B.priceEach 
+        FROM orders A 
         LEFT JOIN orderdetails B ON A.orderNumber =  B.orderNumber
     )
 -- Calculate the total amount owed
-    SELECT customerNumber, sum(quantityOrdered * priceEach) AS Expected_Payment FROM general_info GROUP BY customerNumber
+    SELECT customerNumber, sum(quantityOrdered * priceEach) AS Expected_Payment 
+    FROM general_info GROUP BY customerNumber
 )
 -- From that broader query, show final result of difference between amount owed and paid
-SELECT E.customerName, C.customerNumber, C.Expected_Payment, sum(D.amount) AS Actual_Payment, C.Expected_Payment - sum(D.amount) AS Remaining_Balance FROM cust_specs C 
+SELECT E.customerName, C.customerNumber, C.Expected_Payment, sum(D.amount) AS Actual_Payment, C.Expected_Payment - sum(D.amount) AS Remaining_Balance, round((sum(D.amount) / C.Expected_Payment) * 100, 2) AS Percent_paid
+FROM cust_specs C 
 LEFT JOIN payments D ON C.customerNumber = D.customerNumber
-LEFT JOIN customers E ON D.customerNumber = E.customerNumber GROUP BY customerNumber
+LEFT JOIN customers E ON D.customerNumber = E.customerNumber 
+GROUP BY customerNumber ORDER BY Percent_paid
