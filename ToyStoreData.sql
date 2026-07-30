@@ -62,19 +62,19 @@ FROM Revenue_setup GROUP BY Nation
 -- Setting up for report
 -- Calculate total payment each customer owes and how much they actually paid
 
+-- Calculate the total amount owed based on how much of each product cost and was bought
 WITH cust_specs AS (
     -- Show details how many of each product each customer ordered
     WITH general_info AS (
         SELECT A.orderNumber, A.customerNumber, B.quantityOrdered,B.productCode, B.priceEach 
-        FROM order s A 
+        FROM orders A 
         LEFT JOIN orderdetails B ON A.orderNumber =  B.orderNumber
     )
--- Calculate the total amount owed
     SELECT customerNumber, sum(quantityOrdered * priceEach) AS Expected_Payment 
     FROM general_info 
     GROUP BY customerNumber
 )
--- From that broader query, show final result of difference between amount owed and paid
+-- From that broader query, show final result of difference between amount owed and paid and show customer name, by connecting with customer and payments tables
 SELECT 
 ROW_NUMBER () OVER (ORDER BY (sum(D.amount) / C.Expected_Payment)) AS Table_Number, 
 E.customerName, 
